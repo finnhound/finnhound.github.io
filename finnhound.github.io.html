@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Map Embed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    /* Remove scrollbars */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: white;
+    }
+
+    /* Padding wrapper */
+    .map-container {
+      box-sizing: border-box;
+      width: 100vw;
+      height: 100vh;
+      padding: 6px; /* thin white padding */
+    }
+
+    .map-container iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block; /* prevents tiny gaps */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="map-container">
+    <iframe
+      allow="geolocation"
+      src="https://api.maptiler.com/maps/019b2817-43ac-7a98-b15b-c204722a617b/?key=1xuGVLLA0XJlvXZT2dFB#0.7/22.80535/2.86559">
+    </iframe>
+  </div>
+
+</body>
+</html>
