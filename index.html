@@ -31,18 +31,18 @@
       display: block;
     }
 
-    /* Info button styling */
+    /* Smaller info button styling */
     .info-button {
       position: absolute;
-      top: 10px;
+      bottom: 60px; /* below typical MapTiler navigation */
       right: 10px;
       background: rgba(0, 0, 0, 0.6);
       color: white;
       border: none;
       border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      font-size: 20px;
+      width: 28px;
+      height: 28px;
+      font-size: 16px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -58,7 +58,7 @@
     /* About box styling */
     .about-box {
       position: absolute;
-      top: 50px;
+      bottom: 100px;
       right: 10px;
       background: rgba(255, 255, 255, 0.95);
       color: #333;
@@ -108,30 +108,28 @@
 <script>
   const iframe = document.getElementById('mapFrame');
 
-  // Default map URL
+  // Get map position from URL hash
+  const urlHash = window.location.hash;
   const defaultMap = "https://api.maptiler.com/maps/019b2817-43ac-7a98-b15b-c204722a617b/?key=1xuGVLLA0XJlvXZT2dFB#0.7/22.80535/2.86559";
+  iframe.src = urlHash ? defaultMap.split('#')[0] + urlHash : defaultMap;
 
-  // Load last saved position from localStorage
-  const savedPosition = localStorage.getItem('mapPosition');
-  iframe.src = savedPosition || defaultMap;
-
-  // Listen for messages from iframe (MapTiler supports postMessage for position changes)
+  // Listen for messages from iframe
   window.addEventListener('message', (event) => {
-    // Only accept messages from the maptiler domain
     if (!event.origin.includes("maptiler.com")) return;
 
     try {
       const data = JSON.parse(event.data);
       if (data.type === "map-position") {
-        // Save the zoom/lat/lng
-        localStorage.setItem('mapPosition', `${defaultMap.split('#')[0]}#${data.zoom}/${data.lat}/${data.lng}`);
+        // Update URL hash with zoom/lat/lng
+        const newHash = `#${data.zoom}/${data.lat}/${data.lng}`;
+        history.replaceState(null, null, newHash);
       }
     } catch (e) {
       // ignore invalid messages
     }
   });
 
-  // About box toggle logic
+  // About box toggle
   const infoBtn = document.getElementById('infoBtn');
   const aboutBox = document.getElementById('aboutBox');
   const closeAbout = document.getElementById('closeAbout');
@@ -144,7 +142,6 @@
     aboutBox.style.display = 'none';
   });
 
-  // Close about box if clicking outside
   window.addEventListener('click', (e) => {
     if (e.target !== aboutBox && e.target !== infoBtn && !aboutBox.contains(e.target)) {
       aboutBox.style.display = 'none';
